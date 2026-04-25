@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xpenso – Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f7f6f2;
+      --surface: #ffffff;
+      --border: #e5e2d9;
+      --text: #1a1917;
+      --muted: #6b6860;
+      --accent: #2d6a4f;
+      --accent-light: #e8f5ee;
+      --accent-dark: #1b4332;
+      --tag-bg: #eef7f2;
+      --radius: 12px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(247, 246, 242, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 780px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+    }
+    .nav-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.25rem;
+      color: var(--accent-dark);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-links { display: flex; gap: 24px; list-style: none; }
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 72px 24px 56px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .app-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--tag-bg);
+      border: 1px solid #c3e6d3;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .app-badge span { width: 7px; height: 7px; background: var(--accent); border-radius: 50%; display: inline-block; }
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2.4rem, 6vw, 3.4rem);
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      color: var(--accent-dark);
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.75;
+    }
+    .hero-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding-top: 4px;
+    }
+    .hero-meta span::before { content: "✦  "; color: var(--accent); }
+
+    /* ── DIVIDER ── */
+    .divider {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .divider hr { border: none; border-top: 1px solid var(--border); }
+
+    /* ── SECTION ── */
+    section {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 56px 24px;
+    }
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      letter-spacing: -0.025em;
+      color: var(--accent-dark);
+      margin-bottom: 28px;
+      line-height: 1.2;
+    }
+
+    /* ── CARDS ── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card h3 .icon {
+      width: 28px;
+      height: 28px;
+      background: var(--accent-light);
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .card p, .card ul { color: var(--muted); font-size: 0.94rem; }
+    .card ul { padding-left: 20px; margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .card ul li { list-style: disc; }
+
+    .highlight-box {
+      background: var(--accent-light);
+      border: 1px solid #c3e6d3;
+      border-radius: var(--radius);
+      padding: 18px 24px;
+      font-size: 0.93rem;
+      color: var(--accent-dark);
+      font-weight: 500;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .highlight-box::before { content: "🔒"; font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── T&C LIST ── */
+    .tc-item {
+      border-bottom: 1px solid var(--border);
+      padding: 20px 0;
+    }
+    .tc-item:first-child { padding-top: 0; }
+    .tc-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .tc-item h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; color: var(--text); }
+    .tc-item p { font-size: 0.92rem; color: var(--muted); }
+
+    /* ── CONTACT ── */
+    .contact-card {
+      background: var(--accent-dark);
+      color: white;
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .contact-card p { color: rgba(255,255,255,0.7); font-size: 0.95rem; }
+    .contact-card a {
+      color: #74c69d;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .contact-card a:hover { color: #b7e4c7; }
+    .contact-card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .nav-links { gap: 16px; }
+      .card { padding: 20px 20px; }
+      .contact-card { padding: 28px 24px; }
+    }
+    @media (max-width: 400px) {
+      .nav-links a { font-size: 0.78rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">Xpenso</a>
+      <ul class="nav-links">
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#terms">Terms</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="app-badge"><span></span>Android App</div>
+    <h1>Simple, private<br>expense tracking.</h1>
+    <p>Xpenso helps you track your spending effortlessly — entirely offline, entirely private. Your financial data stays on your device, always.</p>
+    <div class="hero-meta">
+      <span>Offline-first</span>
+     <span>No personal data collection</span>
+      <span>Developed by John</span>
+    </div>
+  </div>
+
+  <div class="divider"><hr /></div>
+
+  <!-- PRIVACY POLICY -->
+  <section id="privacy">
+    <div class="section-label">Legal</div>
+    <h2>Privacy Policy</h2>
+    <p style="color:var(--muted); font-size:0.88rem; margin-bottom: 28px;">Last updated: April 2026 &nbsp;·&nbsp; Effective immediately upon app use</p>
+
+    <div class="highlight-box">
+      Xpenso does not collect, store, or share your personal financial data. Everything you enter stays on your device.
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">👋</span> Introduction</h3>
+      <p>Xpenso is an offline-first expense tracking app developed by John. This Privacy Policy explains how the app handles your data. We believe privacy is a right, not a feature — so we've built Xpenso to keep your financial information entirely on your device.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">📦</span> Data Collection</h3>
+      <p>Xpenso does <strong>not</strong> collect or transmit your personal financial information. All expense entries, budgets, and categories you create are stored <strong>locally on your device only</strong>. We never upload, sync, or access this data.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">📊</span> Analytics (Firebase)</h3>
+      <p>To improve the app experience, Xpenso uses <strong>Firebase Analytics by Google</strong> to collect <em>anonymous</em> usage data. This includes:</p>
+      <ul>
+        <li>App interactions such as screen views and button taps</li>
+        <li>Device type and operating system version</li>
+        <li>General usage patterns and behavior</li>
+      </ul>
+      <p style="margin-top: 12px;">This data <strong>does not</strong> include any of your financial information and <strong>does not</strong> personally identify users.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">⚙️</span> Your Control</h3>
+      <p>You can <strong>disable analytics</strong> at any time from within the app's Settings. Once disabled, no usage data will be collected from your device.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">🚫</span> Data Sharing</h3>
+      <p>We do not sell, trade, or share your data with any third parties. The anonymous analytics data collected via Firebase is governed by <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--accent);">Google's Privacy Policy</a>.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">🔔</span> Permissions</h3>
+      <p>Xpenso may request permission to send <strong>notifications</strong> to your device. This is used solely for optional expense reminders you set yourself. We do not send unsolicited messages or marketing notifications.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">🛡️</span> Security</h3>
+      <p>All your expense data is stored locally on your device and is protected by your device's built-in security (screen lock, encryption). We recommend keeping your device software up to date for the best protection.</p>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">✏️</span> Changes to This Policy</h3>
+      <p>If we update this Privacy Policy, we will reflect the new date at the top of this page. Continued use of the app after changes means you accept the updated policy.</p>
+    </div>
+  </section>
+
+  <div class="divider"><hr /></div>
+
+  <!-- TERMS & CONDITIONS -->
+  <section id="terms">
+    <div class="section-label">Legal</div>
+    <h2>Terms &amp; Conditions</h2>
+    <p style="color:var(--muted); font-size:0.88rem; margin-bottom: 28px;">By using Xpenso, you agree to the following terms.</p>
+
+    <div class="card">
+      <div class="tc-item">
+        <h3>1. Acceptance of Terms</h3>
+        <p>By downloading and using Xpenso, you agree to be bound by these Terms &amp; Conditions. If you do not agree, please discontinue use of the app.</p>
+      </div>
+      <div class="tc-item">
+        <h3>2. User Responsibility</h3>
+        <p>You are solely responsible for the accuracy of the expense data you enter. Xpenso is a personal tracking tool and does not verify, audit, or validate any financial information you record.</p>
+      </div>
+      <div class="tc-item">
+        <h3>3. No Financial or Investment Advice</h3>
+        <p>Xpenso is a personal expense tracker only. Nothing in this app constitutes financial, investment, legal, or tax advice. Always consult a qualified professional for financial decisions.</p>
+      </div>
+      <div class="tc-item">
+        <h3>4. App Provided "As Is"</h3>
+        <p>Xpenso is provided on an "as is" and "as available" basis without warranties of any kind. We do not guarantee the app will be error-free or uninterrupted. We are not liable for any loss of data or damages arising from your use of the app.</p>
+      </div>
+      <div class="tc-item">
+        <h3>5. Intellectual Property</h3>
+        <p>All content, branding, design, and code within Xpenso are owned by John. You may not copy, modify, distribute, or reverse-engineer any part of the app without prior written permission.</p>
+      </div>
+      <div class="tc-item">
+        <h3>6. Changes to Terms</h3>
+        <p>We reserve the right to update these terms at any time. Updates will be reflected on this page. Continued use of the app constitutes acceptance of the revised terms.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><hr /></div>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="section-label">Get in touch</div>
+    <h2>Contact Us</h2>
+
+    <div class="contact-card">
+      <h3>Have a question or concern?</h3>
+      <p>If you have questions about your privacy, the app, or anything else, reach out — we're happy to help.</p>
+      <div>
+        <div style="font-size:0.78rem; color:rgba(255,255,255,0.5); margin-bottom:4px; letter-spacing:0.08em; text-transform:uppercase; font-weight:600;">Email</div>
+        <a href="mailto:xpenso.app.contact@gmail.com">xpenso.app.contact@gmail.com</a>
+      </div>
+      <p style="font-size: 0.82rem; color:rgba(255,255,255,0.45); margin-top: 8px;">Developed by John &nbsp;·&nbsp; Xpenso for Android</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Xpenso by John &nbsp;·&nbsp; <a href="#privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="#terms">Terms &amp; Conditions</a></p>
+  </footer>
+
+</body>
+</html>
